@@ -1,0 +1,297 @@
+:root {
+  --tlo: #f2f2f7;
+  --karta: #ffffff;
+  --karta-2: #e9e9ee;
+  --tekst: #000000;
+  --tekst-2: #6c6c70;
+  --tekst-3: #aeaeb2;
+  --linia: rgba(60, 60, 67, 0.18);
+  --linia-cicha: rgba(60, 60, 67, 0.09);
+  --akcent: #4a7c0a;
+  --akcent-tlo: #c8f23f;
+  --na-akcencie: #14210a;
+  --dobry: #2f9e44;
+  --zly: #e03131;
+  --wyroznienie: rgba(124, 179, 20, 0.13);
+  --do-wpisania: rgba(124, 179, 20, 0.26);
+  --promien: 12px;
+  --h-pasek: 52px;
+  --h-wiersz: 34px;
+  --h-imiona: 30px;
+  --w-pionu: 26px;
+  --pad-boczny: 12px;
+  --w-etykiety: 118px;
+  --h-razem: 32px;
+}
+
+/* Motyw ciemny włącza klasa na <html> — patrz przełącznik w pasku. */
+:root.ciemny {
+    --tlo: #000000;
+    --karta: #1c1c1e;
+    --karta-2: #2c2c2e;
+    --tekst: #ffffff;
+    --tekst-2: #98989f;
+    --tekst-3: #636366;
+    --linia: rgba(84, 84, 88, 0.5);
+    --linia-cicha: rgba(255, 255, 255, 0.07);
+    --akcent: #d4fb52;
+    --akcent-tlo: #d4fb52;
+    --na-akcencie: #14210a;
+    --dobry: #7bd88f;
+    --zly: #ff6b6b;
+    --wyroznienie: rgba(212, 251, 82, 0.08);
+    --do-wpisania: rgba(212, 251, 82, 0.16);
+  }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/* display z klasy bije domyślne display:none atrybutu hidden — stąd !important. */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--tlo);
+  color: var(--tekst);
+  font: 400 17px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  overscroll-behavior-y: contain;
+}
+
+.ekran {
+  padding: max(env(safe-area-inset-top), 12px) 16px calc(32px + env(safe-area-inset-bottom));
+  max-width: 720px;
+  margin: 0 auto;
+}
+/* Plansza bez własnego paddingu — linie mają dochodzić do krawędzi.
+   Oddech dokładają sobie pasek i komórki tabeli. */
+.ekran-gra {
+  height: 100vh; height: 100dvh;
+  display: flex; flex-direction: column;
+  max-width: 720px; margin: 0 auto;
+  padding: max(env(safe-area-inset-top), 12px) 0 env(safe-area-inset-bottom);
+  overflow: hidden;
+}
+
+h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin: 8px 0 4px; }
+h2 { font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -0.3px; }
+h3 { font-size: 18px; font-weight: 600; margin: 0 0 2px; }
+.podpowiedz { color: var(--tekst-2); font-size: 14px; margin: 0; }
+
+.btn {
+  font: inherit; font-weight: 500; border: none; border-radius: 10px;
+  padding: 12px 18px; background: var(--karta); color: var(--akcent);
+  cursor: pointer; transition: transform 0.08s, opacity 0.15s;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.35; cursor: default; }
+.btn-glowny { background: var(--akcent-tlo); color: var(--na-akcencie); flex: 1; }
+.btn-cichy { background: var(--karta); }
+.btn-danger { color: var(--zly); }
+.btn-danger-tlo { background: var(--zly); color: #fff; }
+.btn-ikona { background: none; padding: 7px 9px; line-height: 1; display: flex; align-items: center; }
+.ikona { width: 20px; height: 20px; display: block; }
+.link { background: none; border: none; color: var(--akcent); font: inherit; padding: 0; cursor: pointer; text-decoration: underline; }
+
+.stopka-akcji { display: flex; gap: 10px; margin-top: 20px; }
+
+/* Ekran startowy sięga wysokości okna, żeby „Zacznij grę" siedziało
+   przy dolnej krawędzi. Zwykły flow, nie position: fixed — dzięki temu
+   klawiatura na telefonie po prostu przewija stronę. */
+/* Ekran startowy i końcowy dzielą układ: wyśrodkowany tytuł u góry,
+   treść wyśrodkowana w wolnej przestrzeni, akcja przy dolnej krawędzi. */
+.ekran-pionowy { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.ekran-pionowy h1 { text-align: center; }
+/* Ekran powitalny: znak, nazwa i podpis jako jeden blok nad formularzem. */
+.hero { text-align: center; margin-bottom: 28px; }
+.hero h1 { margin: 0 0 6px; }
+.logo { display: flex; justify-content: center; margin-bottom: 12px; color: var(--akcent); }
+.logo .ikona { width: 60px; height: 60px; stroke-width: 1.5; }
+.marka { display: flex; align-items: center; gap: 9px; }
+.logo-maly { margin-bottom: 0; }
+.logo-maly .ikona { width: 24px; height: 24px; stroke-width: 2; }
+.haslo { color: var(--tekst-2); font-size: 15px; margin: 0; }
+.ekran-pionowy .srodek {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.ekran-pionowy .stopka-akcji { margin-top: 0; }
+.wznow { margin-top: 24px; color: var(--tekst-2); font-size: 15px; text-align: center; }
+
+.lista-graczy { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lista-graczy li { position: relative; }
+.lista-graczy input {
+  width: 100%; font: inherit; padding: 12px 46px 12px 14px; border-radius: var(--promien);
+  border: 1px solid var(--linia); background: var(--karta); color: var(--tekst);
+}
+.lista-graczy input:focus { outline: 2px solid var(--akcent); outline-offset: -1px; }
+/* Krzyżyk siedzi w polu, nie obok niego. */
+.usun {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  display: flex; padding: 8px; border: none; border-radius: 8px;
+  background: none; color: var(--tekst-3); cursor: pointer;
+}
+.usun:active { color: var(--zly); }
+.usun .ikona { width: 18px; height: 18px; }
+#dodaj-gracza, #podejrzyj { width: 100%; }
+
+/* — przyklejona góra — */
+
+.pasek {
+  flex: none; display: flex; align-items: center; gap: 12px;
+  height: var(--h-pasek); padding: 0 var(--pad-boczny);
+  border-bottom: 1px solid var(--linia);
+}
+.tytul { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin: 0; }
+.pasek-akcje { margin-left: auto; }
+.pion-tekst.pion-blokada { color: var(--akcent); }
+/* Minus własny padding przycisku, żeby prawa krawędź ikony stanęła
+   równo z liczbami w ostatniej kolumnie. */
+.pasek-akcje { display: flex; gap: 4px; margin-right: -9px; }
+
+/* — tabela — */
+
+.tabela-wrap { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+/* separate + spacing 0 zamiast collapse — na scalonych ramkach
+   position: sticky na komórkach nie działa w WebKicie. */
+.tabela { width: auto; table-layout: fixed; border-collapse: separate; border-spacing: 0; font-size: 16px; }
+.tabela td, .tabela th {
+  padding: 0 var(--pad-boczny); text-align: right; white-space: nowrap;
+  height: var(--h-wiersz);
+  border-bottom: 1px solid var(--linia-cicha);
+  border-right: 1px solid var(--linia);
+}
+.tabela td:last-child, .tabela th:last-child { border-right: none; }
+
+/* Dwie przyklejone kolumny z lewej: pionowy podpis sekcji i nazwa wiersza. */
+.tabela .pion {
+  position: sticky; left: 0; z-index: 4; background: var(--tlo);
+  padding: 0;
+  vertical-align: middle; text-align: center;
+  border-right: 1px solid var(--linia);
+}
+/* Obracamy sam napis, nie komórkę — transform na td przerzuca
+   border-right na lewą stronę. */
+.pion-tekst {
+  display: inline-block;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-size: 10px; font-weight: 500; letter-spacing: 1.4px;
+  text-transform: uppercase; color: var(--tekst-3);
+}
+.tabela .etykieta {
+  position: sticky; left: var(--w-pionu); z-index: 4; background: var(--tlo);
+  text-align: left; color: var(--tekst-2); font-weight: 400;
+  /* granica przyklejonej części tabeli */
+  border-right: 1px solid var(--linia);
+}
+
+/* Imiona graczy przyklejone u góry. */
+.tabela thead th {
+  position: sticky; top: 0; z-index: 5; background: var(--tlo);
+  height: var(--h-imiona); font-size: 13px; font-weight: 500; color: var(--tekst-2);
+  border-bottom: 1px solid var(--linia);
+}
+/* Róg nagłówka: jedna komórka na obie przyklejone kolumny, żeby podpis
+   sekcji nie ucinał numeru rundy. */
+.tabela thead th.rog {
+  position: sticky; left: 0; z-index: 6; background: var(--tlo);
+  text-align: left; padding-left: var(--pad-boczny);
+  font-size: 11px; font-weight: 500; letter-spacing: 0.3px;
+  text-transform: uppercase; color: var(--tekst-3);
+  border-right: 1px solid var(--linia);
+}
+.tabela thead th.pion { border-bottom: none; }
+.tabela thead th.teraz { color: var(--akcent); font-weight: 600; }
+/* Za długie imię przycinamy — kolumny mają stałą szerokość. */
+.tabela thead th:not(.rog) { overflow: hidden; text-overflow: ellipsis; }
+
+/* Wynik całkowity przyklejony na dole. */
+.tabela tfoot td {
+  position: sticky; bottom: 0; z-index: 5; background: var(--tlo);
+  height: var(--h-razem); font-size: inherit; font-weight: 700;
+  border-top: 1px solid var(--linia); border-bottom: none;
+}
+/* Ta sama typografia co „Suma" w środku tabeli i ten sam wcięcie
+   co tytuł w pasku oraz numer rundy w rogu. */
+.tabela tfoot .stopka-rog {
+  position: sticky; left: 0; z-index: 6; background: var(--tlo);
+  text-align: left; padding-left: var(--pad-boczny);
+  font-weight: 600; color: var(--tekst);
+  border-right: 1px solid var(--linia);
+}
+
+/* Granica między szkółką a figurami. */
+.tabela tr.granica td { border-bottom: 1px solid var(--linia); }
+.tabela tbody .pion { border-bottom: none; }
+.tabela tbody .pion-granica { border-bottom: 1px solid var(--linia); }
+/* Ostatni wiersz nie rysuje własnej linii — nad stopką jest już jej border-top. */
+.tabela tbody tr:last-child td { border-bottom: none; }
+
+.tabela .suma td { font-weight: 600; }
+.tabela .suma .etykieta { color: var(--tekst); font-weight: 600; }
+
+/* Nie tylko komórki gracza — także wiersz Bonus / Kara. */
+.tabela .dodatnia { color: var(--dobry); }
+.tabela .ujemna { color: var(--zly); }
+.komorka.klikalna { cursor: pointer; }
+.komorka.czeka { background: var(--do-wpisania); color: var(--akcent); font-weight: 600; }
+.komorka.czeka:active { opacity: 0.6; }
+.kol-teraz { background: var(--wyroznienie); }
+/* Imię gracza i jego wynik też należą do podświetlonej kolumny. Te komórki
+   są sticky, więc potrzebują nieprzezroczystego tła — tint idzie warstwą
+   wyżej, zamiast zastępować kolor. */
+.tabela thead th.kol-teraz,
+.tabela tfoot td.kol-teraz {
+  background-color: var(--tlo);
+  background-image: linear-gradient(var(--wyroznienie), var(--wyroznienie));
+}
+
+/* — bottom sheet — */
+
+.sheet { position: fixed; inset: 0; z-index: 10; }
+.sheet-tlo { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4); }
+.sheet-panel {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  max-width: 720px; margin: 0 auto;
+  background: var(--karta); border-radius: 20px 20px 0 0;
+  padding: 8px 16px calc(16px + env(safe-area-inset-bottom));
+  animation: wjazd 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+@keyframes wjazd { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.grip { width: 36px; height: 5px; border-radius: 3px; background: var(--linia); margin: 0 auto 10px; }
+.sheet-naglowek { text-align: center; margin-bottom: 8px; }
+
+.wyswietlacz {
+  display: block; text-align: center; font-size: 40px; font-weight: 600;
+  letter-spacing: -1px; padding: 8px 0 12px; min-height: 64px;
+}
+.wyswietlacz:empty::before { content: '0'; color: var(--tekst-3); }
+
+.klawiatura { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.klawisz {
+  font: inherit; font-size: 26px; font-weight: 400; padding: 14px 0;
+  border: none; border-radius: var(--promien); background: var(--karta-2);
+  color: var(--tekst); cursor: pointer;
+}
+.klawisz:active { background: var(--wyroznienie); }
+.klawisz.pomocniczy { color: var(--tekst-2); display: flex; align-items: center; justify-content: center; }
+.klawisz .ikona { width: 22px; height: 22px; }
+.klawisz:disabled { opacity: 0.25; cursor: default; }
+
+.sheet-akcje { display: flex; gap: 8px; margin-top: 12px; }
+.sheet-akcje .btn { flex: 1; padding: 14px 8px; }
+.sheet-akcje .btn-cichy { background: var(--karta-2); }
+
+.wyniki { list-style: none; padding: 0; margin: 0 0 10px; }
+.wyniki li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 16px; background: var(--karta); border-radius: var(--promien); margin-bottom: 8px; }
+.wyniki .miejsce { color: var(--tekst-2); font-size: 15px; width: 28px; flex: none; }
+.wyniki .imie { flex: 1; font-weight: 500; }
+.wyniki .punkty { font-size: 22px; font-weight: 700; }
+.wyniki li.zwyciezca { box-shadow: inset 0 0 0 2px var(--akcent); }
+
+dialog {
+  border: none; border-radius: 16px; padding: 20px; width: min(360px, calc(100vw - 40px));
+  background: var(--karta); color: var(--tekst);
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.4); }
+.dialog-akcje { display: flex; gap: 8px; margin-top: 16px; }
+.dialog-akcje .btn { flex: 1; padding: 12px 8px; }

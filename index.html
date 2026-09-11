@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Kości</title>
+<meta name="theme-color" content="#f2f2f7" id="meta-motyw">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kości">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // Ustawiamy motyw przed pierwszym malowaniem, żeby nie mrugnęło bielą.
+  (function () {
+    var wybor = localStorage.getItem('kosci.motyw') || 'auto';
+    var ciemny = wybor === 'ciemny'
+      || (wybor === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.classList.toggle('ciemny', ciemny);
+    document.documentElement.style.colorScheme = ciemny ? 'dark' : 'light';
+  })();
+</script>
+</head>
+<body>
+
+<main id="ekran-setup" class="ekran ekran-pionowy" hidden>
+  <div class="srodek">
+    <div class="hero">
+      <div class="logo" id="logo"></div>
+      <h1>Kości</h1>
+      <p class="haslo">Kto dzisiaj gra?</p>
+    </div>
+    <ol id="lista-graczy" class="lista-graczy"></ol>
+    <button id="dodaj-gracza" class="btn btn-cichy">Dodaj gracza</button>
+  </div>
+  <div class="stopka-akcji">
+    <button id="start" class="btn btn-glowny">Zacznij grę</button>
+  </div>
+  <p id="wznow-info" class="wznow" hidden>
+    Masz niedokończoną partię.
+    <button id="wznow" class="link">Wróć do niej</button>
+  </p>
+</main>
+
+<main id="ekran-gra" class="ekran-gra" hidden>
+  <header class="pasek" id="pasek">
+    <div class="marka">
+      <span class="logo logo-maly" id="logo-gra"></span>
+      <h1 class="tytul">Kości</h1>
+    </div>
+    <div class="pasek-akcje">
+      <button id="motyw" class="btn btn-ikona"></button>
+      <button id="cofnij" class="btn btn-ikona" aria-label="Cofnij ostatni wpis"></button>
+      <button id="wyjscie" class="btn btn-ikona" aria-label="Zakończ partię"></button>
+    </div>
+  </header>
+
+  <div class="tabela-wrap" id="tabela-wrap">
+    <table class="tabela" id="tabela"></table>
+  </div>
+</main>
+
+<main id="ekran-koniec" class="ekran ekran-pionowy" hidden>
+  <div class="srodek">
+    <div class="hero">
+      <div class="logo" id="logo-koniec"></div>
+      <h1>Koniec gry</h1>
+      <p class="haslo" id="zwyciezca"></p>
+    </div>
+    <ol id="wyniki" class="wyniki"></ol>
+    <button id="podejrzyj" class="btn btn-cichy">Pokaż arkusz</button>
+  </div>
+  <div class="stopka-akcji">
+    <button id="nowa-gra" class="btn btn-glowny">Nowa gra</button>
+  </div>
+</main>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-tlo" id="sheet-tlo"></div>
+  <section class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheet-tytul">
+    <div class="grip"></div>
+    <div class="sheet-naglowek">
+      <h3 id="sheet-tytul"></h3>
+      <p id="sheet-podpis" class="podpowiedz"></p>
+    </div>
+    <output id="sheet-wartosc" class="wyswietlacz"></output>
+    <div class="klawiatura" id="klawiatura"></div>
+    <div class="sheet-akcje">
+      <button id="sheet-anuluj" class="btn btn-cichy">Anuluj</button>
+      <button id="sheet-usun" class="btn btn-cichy btn-danger">Wyczyść</button>
+      <button id="sheet-zapisz" class="btn btn-glowny">Zapisz</button>
+    </div>
+  </section>
+</div>
+
+<dialog id="dialog-potwierdz">
+  <form method="dialog">
+    <h3 id="potwierdz-tytul"></h3>
+    <p id="potwierdz-tresc" class="podpowiedz"></p>
+    <div class="dialog-akcje">
+      <button value="nie" class="btn btn-cichy">Anuluj</button>
+      <button value="tak" class="btn btn-glowny btn-danger-tlo" id="potwierdz-tak"></button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
